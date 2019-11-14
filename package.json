@@ -1,0 +1,27 @@
+{
+  "name": "optional",
+  "version": "1.0.0",
+  "description": "A Typescript OOP implementation of monad",
+  "main": "lib/index.js",
+  "author": "Théo HOLANDER <holandertheo@gmail.com>",
+  "license": "MIT",
+  "husky": {
+    "hooks": {
+      "precommit": "yarn lint --fix"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint src/**/*.ts"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.7.0",
+    "@typescript-eslint/parser": "^2.7.0",
+    "eslint": "^6.6.0",
+    "eslint-config-prettier": "^6.5.0",
+    "eslint-plugin-prettier": "^3.1.1",
+    "husky": "^3.0.9",
+    "prettier": "^1.19.1",
+    "typescript": "^3.7.2"
+  }
+}
