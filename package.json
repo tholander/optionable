@@ -1,18 +1,27 @@
 {
   "name": "optional",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "A Typescript OOP implementation of monad",
   "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "author": "Théo HOLANDER <holandertheo@gmail.com>",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tholander/optional"
+  },
   "husky": {
     "hooks": {
-      "precommit": "yarn lint --fix"
+      "pre-commit": "yarn lint:fix",
+      "pre-push": "yarn lint"
     }
   },
   "scripts": {
     "build": "tsc",
-    "lint": "eslint src/**/*.ts"
+    "prepack": "yarn build",
+    "postpack": "rm -rf lib",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.7.0",
@@ -23,5 +32,11 @@
     "husky": "^3.0.9",
     "prettier": "^1.19.1",
     "typescript": "^3.7.2"
-  }
+  },
+  "keywords": [
+    "typescript",
+    "optional",
+    "monad",
+    "type safety"
+  ]
 }
