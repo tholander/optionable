@@ -1,6 +1,6 @@
 {
   "name": "optionable",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A Typescript OOP implementation of monad",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
