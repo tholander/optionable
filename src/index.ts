@@ -1,7 +1,7 @@
 type Mapper<T, R> = (value: T) => R;
 type Factory<T> = () => T;
 
-interface Optional<T> {
+interface Optionable<T> {
   readonly isPresent: boolean;
   get: () => T;
   getOrElse: (factory: Factory<T>) => T;
@@ -16,7 +16,7 @@ export class NoElementError extends Error {
   }
 }
 
-class Present<T> implements Optional<T> {
+class Present<T> implements Optionable<T> {
   constructor(private value: T) {}
 
   public readonly isPresent = true;
@@ -45,7 +45,7 @@ class Present<T> implements Optional<T> {
   }
 }
 
-class Empty<T> implements Optional<T> {
+class Empty<T> implements Optionable<T> {
   public readonly isPresent: boolean = false;
 
   public get(): T {
@@ -73,20 +73,20 @@ class Empty<T> implements Optional<T> {
   }
 }
 
-export function of<T>(value: T): Optional<T> {
+export function of<T>(value: T): Optionable<T> {
   if (value === null || value === undefined) {
     throw new Error("value is null");
   }
   return new Present(value);
 }
 
-export function ofNullable<T>(value: T): Optional<T> {
+export function ofNullable<T>(value: T): Optionable<T> {
   if (value === null || value === undefined) {
     return new Empty<T>();
   }
   return new Present<T>(value);
 }
 
-export function empty<T>(): Optional<T> {
+export function empty<T>(): Optionable<T> {
   return new Empty<T>();
 }
