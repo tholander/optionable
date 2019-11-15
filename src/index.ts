@@ -6,7 +6,7 @@ interface Optionable<T> {
   get: () => T;
   getOrElse: (factory: Factory<T>) => T;
   getOrDefault: (defaultValue: T) => T;
-  getOrThrow: <E extends ErrorConstructor>(error: E) => T;
+  getOrThrow: <E extends ErrorConstructor | Error>(error: E) => T;
   map: <R>(transformer: Mapper<T, R>) => R;
 }
 
@@ -40,7 +40,7 @@ class Present<T> implements Optionable<T> {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public getOrThrow<E extends ErrorConstructor>(_: E): T {
+  public getOrThrow<E extends ErrorConstructor | Error>(_: E): T {
     return this.value;
   }
 }
