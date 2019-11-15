@@ -1,10 +1,12 @@
 type Mapper<T, R> = (value: T) => R;
+type Factory<T> = () => T;
 
 interface Optional<T> {
   readonly isPresent: boolean;
   get: () => T;
-  getOrElse: (defaultValue: T) => T;
-  getOrThrow: <E extends Error>(error: E) => T;
+  getOrElse: (factory: Factory<T>) => T;
+  getOrDefault: (defaultValue: T) => T;
+  getOrThrow: <E extends ErrorConstructor>(error: E) => T;
   map: <R>(transformer: Mapper<T, R>) => R;
 }
 
@@ -28,33 +30,45 @@ class Present<T> implements Optional<T> {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public getOrElse(_: T): T {
+  public getOrDefault(_: T): T {
     return this.value;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public getOrThrow<R extends Error>(_: R): T {
+  public getOrElse(_: Factory<T>): T {
+    return this.value;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public getOrThrow<E extends ErrorConstructor>(_: E): T {
     return this.value;
   }
 }
 
 class Empty<T> implements Optional<T> {
-  readonly isPresent: boolean = false;
+  public readonly isPresent: boolean = false;
 
-  get(): T {
+  public get(): T {
     throw new NoElementError();
   }
 
-  getOrElse(defaultValue: T): T {
+  public getOrDefault(defaultValue: T): T {
     return defaultValue;
   }
 
-  getOrThrow<E extends Error>(error: E): T {
-    throw error;
+  public getOrElse(factory: Factory<T>): T {
+    return factory();
+  }
+
+  public getOrThrow<E extends ErrorConstructor | Error>(error: E): T {
+    if (error instanceof Error) {
+      throw error;
+    }
+    throw new (error as ErrorConstructor)();
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  map<R>(_: Mapper<T, R>): R {
+  public map<R>(_: Mapper<T, R>): R {
     throw new NoElementError();
   }
 }
