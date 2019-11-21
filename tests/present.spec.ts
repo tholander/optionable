@@ -26,6 +26,6 @@ describe("Present Optionable", () => {
 
   it("should return correct value with map", () => {
     const upper = str.toUpperCase();
-    expect(option.map(s => s.toUpperCase())).toBe(upper);
+    expect(option.map(s => s.toUpperCase()).get()).toBe(upper);
   });
 });

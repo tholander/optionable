@@ -7,7 +7,7 @@ export interface Optionable<T> {
   getOrElse: (factory: Factory<T>) => T;
   getOrDefault: (defaultValue: T) => T;
   getOrThrow: <E extends ErrorConstructor | Error>(error: E) => T;
-  map: <R>(transformer: Mapper<T, R>) => R;
+  map: <R>(transformer: Mapper<T, R>) => Optionable<R>;
 }
 
 export class NoElementError extends Error {

@@ -27,7 +27,7 @@ describe("Empty Optionable", () => {
     expect(option.getOrElse(factory)).toBe(str);
   });
 
-  it("should throw NoElementError with map", () => {
-    expect(() => option.map(str => str.toUpperCase())).toThrow(new NoElementError());
+  it("should return empty with map", () => {
+    expect(option.map(str => str.toUpperCase()).isPresent).toBeFalsy();
   });
 });
