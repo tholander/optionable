@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "alwaysStrict": true,
+        "baseUrl": "src",
+        "outDir": "lib",
+        "declaration": true,
+        "moduleResolution": "node",
+        "noImplicitAny": true,
+        "noImplicitReturns": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "strict": true,
+        "target": "es3",
+        "esModuleInterop": true,
+        "lib": [
+            "es7"
+        ]
+    },
+    "include": ["**/*.spec.ts"],
+    "exclude": ["node_modules"]
+}
