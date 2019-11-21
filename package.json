@@ -18,17 +18,22 @@
   },
   "scripts": {
     "build": "tsc",
+    "clean": "rimraf ./lib",
+    "prebuild": "yarn clean",
     "prepack": "yarn build",
-    "postpack": "rm -rf lib",
+    "postpack": "yarn clean",
     "lint": "eslint src/**/*.ts",
     "lint:fix": "eslint src/**/*.ts --fix",
-    "test": "jest"
+    "test": "jest",
+    "test:cover": "jest --coverage",
+    "coveralls": "cat ./coverage/lcon.info | coveralls"
   },
   "devDependencies": {
     "@types/faker": "^4.1.7",
     "@types/jest": "^24.0.23",
     "@typescript-eslint/eslint-plugin": "^2.7.0",
     "@typescript-eslint/parser": "^2.7.0",
+    "coveralls": "^3.0.8",
     "eslint": "^6.6.0",
     "eslint-config-prettier": "^6.5.0",
     "eslint-plugin-prettier": "^3.1.1",
@@ -36,6 +41,7 @@
     "husky": "^3.0.9",
     "jest": "^24.9.0",
     "prettier": "^1.19.1",
+    "rimraf": "^3.0.0",
     "ts-jest": "^24.1.0",
     "typescript": "^3.7.2"
   },
