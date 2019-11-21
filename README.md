@@ -132,6 +132,7 @@ const bar: string = foo.getOrThrow(MyCustomError);
 const bar: string = foo.getOrThrow(new MyCustomError("my custom error message"));
 ```
 
+### Helpers
 #### map
 This method has the same purpose as the `Array.prototype.map` function. You can use it to transform the value contained in an `Optionable` object.
 
@@ -146,4 +147,34 @@ interface User {
 ...
 const user: Optionable<User> = getOneUser();
 const username: Optionable<string> = user.map(u => `${u.firstname} ${u.lastname.toUpperCase()}`);
+```
+
+#### filter
+This method will return an empty `Optionable` if the predicate you pass to it is false
+```typescript
+import { of } from "optionable"
+
+const foo = of("foo")
+            .filter((str: string) => str.length < 2)
+            .isPresent; // false
+const bar = of("bar")
+            .filter((str: string) => str.length < 0)
+            .isPresent; // true
+```
+
+#### flatMap
+This method is useful for mapping an `Optionable` object using a function which returns an `Optionable` value
+```typescript
+import { ofNullable, Optionable } from "optionable";
+
+function getUsers(): Optionable<User[]> {
+  ...
+}
+
+function getFirstWoman(users: User[]): Optionable<User> {
+  return ofNullable(users.find(u => u.sex === "female"));
+}
+
+const users = getUsers();
+const woman: Optionable<User> = users.flatMap(getFirstWoman);
 ```
