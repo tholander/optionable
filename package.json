@@ -12,18 +12,18 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn lint:fix",
       "pre-push": "yarn lint"
     }
   },
   "scripts": {
     "build": "tsc",
-    "clean": "rimraf ./lib",
+    "clean": "rimraf ./lib ./coverage",
     "prebuild": "yarn clean",
     "prepack": "yarn build",
     "postpack": "yarn clean",
     "lint": "eslint src/**/*.ts",
     "lint:fix": "eslint src/**/*.ts --fix",
+    "pretest": "yarn lint",
     "test": "jest",
     "test:cover": "jest --coverage",
     "coveralls": "cat ./coverage/lcov.info | coveralls"
@@ -49,6 +49,7 @@
     "typescript",
     "optional",
     "monad",
-    "type safety"
+    "type-safety",
+    "null-check"
   ]
 }

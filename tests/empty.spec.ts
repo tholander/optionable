@@ -1,5 +1,5 @@
 import * as faker from "faker";
-import { empty, NoElementError } from "../src";
+import { empty, NoElementError, of } from "../src";
 
 describe("Empty Optionable", () => {
   const option = empty<string>();
@@ -21,13 +21,38 @@ describe("Empty Optionable", () => {
     expect(() => option.getOrThrow(new TypeError())).toThrow(new TypeError());
   });
 
-  it("should call function with getOrElse", () => {
+  it("should return function result with getOrElse", () => {
     const str = faker.lorem.words();
     const factory = (): string => str;
     expect(option.getOrElse(factory)).toBe(str);
   });
 
+  it("should return function result with getOrElse", () => {
+    const str = faker.lorem.words();
+    const mock = jest.fn().mockReturnValue(str);
+    option.getOrElse(mock);
+    expect(mock).toHaveBeenCalled();
+  });
+
   it("should return empty with map", () => {
     expect(option.map(str => str.toUpperCase()).isPresent).toBeFalsy();
+  });
+
+  it("should return empty with truthy filter", () => {
+    expect(option.filter(() => true).isPresent).toBeFalsy();
+  });
+
+  it("should return empty with falsy filter", () => {
+    expect(option.filter(() => false).isPresent).toBeFalsy();
+  });
+
+  it("should return empty with empty flatMap", () => {
+    const mock = jest.fn().mockReturnValue(empty());
+    expect(option.flatMap(mock).isPresent).toBeFalsy();
+  });
+
+  it("should return empty with non-empty flatMap", () => {
+    const mock = jest.fn().mockReturnValue(of(1));
+    expect(option.flatMap(mock).isPresent).toBeFalsy();
   });
 });
