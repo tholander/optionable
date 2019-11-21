@@ -1,5 +1,3 @@
-import { ofNullable } from "factories";
-
 export type Mapper<T, R> = (value: T) => R;
 export type Factory<T> = () => T;
 export type Predicate<T> = (value: T) => boolean;
