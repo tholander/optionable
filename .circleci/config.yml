@@ -10,7 +10,7 @@ whitelist: &whitelist
     - lib/*
     - node_modules/*
     - src/*
-    - test/*
+    - tests/*
     - LICENSE
     - package.json
     - README.md
@@ -19,6 +19,7 @@ whitelist: &whitelist
     - .eslintignore
     - .prettierrc
     - .editorconfig
+    - jest.config.js
     - .vscode/*
 version: 2
 jobs:
