@@ -19,7 +19,6 @@ whitelist: &whitelist
     - .eslintignore
     - .prettierrc
     - .editorconfig
-    - jest.config.js
     - .vscode/*
 version: 2
 jobs:
