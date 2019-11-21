@@ -1,4 +1,10 @@
 # Optionable
+
+[![npm](https://img.shields.io/npm/v/optionable)](https://www.npmjs.com/package/optionable)
+[![CircleCI Build](https://img.shields.io/circleci/build/github/tholander/optionable)](https://circleci.com/gh/tholander/optionable)
+[![Coverage Status](https://coveralls.io/repos/github/tholander/optionable/badge.svg)](https://coveralls.io/github/tholander/optionable)
+
+
 This library is made to avoid as much as possible the usage of `null` or `undefined` values. It is mostly inspired by the Optional interface of Java language.
 
 ## Installation
