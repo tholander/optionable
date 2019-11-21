@@ -1,12 +1,13 @@
 import { Optionable, Mapper, Factory } from ".";
+import { ofNullable } from "./factories";
 
 export class Present<T> implements Optionable<T> {
   constructor(private value: T) {}
 
   public readonly isPresent = true;
 
-  public map<R>(transformer: Mapper<T, R>): R {
-    return transformer(this.value);
+  public map<R>(transformer: Mapper<T, R>): Optionable<R> {
+    return ofNullable(transformer(this.value));
   }
 
   public get(): T {

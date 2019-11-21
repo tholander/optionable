@@ -1,4 +1,5 @@
 import { Optionable, NoElementError, Factory, Mapper } from ".";
+import { empty } from "./factories";
 
 export default class Empty<T> implements Optionable<T> {
   public readonly isPresent: boolean = false;
@@ -23,7 +24,7 @@ export default class Empty<T> implements Optionable<T> {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public map<R>(_: Mapper<T, R>): R {
-    throw new NoElementError();
+  public map<R>(_: Mapper<T, R>): Optionable<R> {
+    return empty<R>();
   }
 }

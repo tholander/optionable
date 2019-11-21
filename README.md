@@ -134,7 +134,6 @@ const bar: string = foo.getOrThrow(new MyCustomError("my custom error message"))
 
 #### map
 This method has the same purpose as the `Array.prototype.map` function. You can use it to transform the value contained in an `Optionable` object.
-But use it with caution, because it will throw a `NoElementError` if the object is empty.
 
 ```typescript
 import { Optionable, NoElementError } from "optionable";
@@ -146,10 +145,5 @@ interface User {
 }
 ...
 const user: Optionable<User> = getOneUser();
-try {
-    const username: string = user.map(u => `${u.firstname} ${u.lastname.toUpperCase()}`);
-    ...
-} catch(error: NoElementError) {
-
-}
+const username: Optionable<string> = user.map(u => `${u.firstname} ${u.lastname.toUpperCase()}`);
 ```
