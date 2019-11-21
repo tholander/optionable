@@ -2,7 +2,7 @@
     "arrowParens": "avoid",
     "bracketSpacing": true,
     "cursorOffset": -1,
-    "endOfLine": "lf",
+    "endOfLine": "auto",
     "parser": "typescript",
     "printWidth": 120,
     "semi": true,

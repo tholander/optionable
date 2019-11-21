@@ -1,3 +1,4 @@
+.circleci/
 node_modules/
 .vscode/
 .editorconfig
@@ -8,3 +9,4 @@ yarn.lock
 .gitignore
 src/
 *.tgz
+.coveralls.yml

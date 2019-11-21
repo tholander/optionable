@@ -10,6 +10,11 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "strict": true,
-    "target": "es3"
-  }
+    "target": "es3",
+    "lib": [
+      "es7"
+    ]
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "**/*.spec.*"]
 }
