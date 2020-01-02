@@ -55,4 +55,10 @@ describe("Empty Optionable", () => {
     const mock = jest.fn().mockReturnValue(of(1));
     expect(option.flatMap(mock).isPresent).toBeFalsy();
   });
+
+  it("should not execute callback", () => {
+    const mock = jest.fn();
+    option.ifPresent(mock);
+    expect(mock).not.toHaveBeenCalled();
+  });
 });

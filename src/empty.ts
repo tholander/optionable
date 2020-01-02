@@ -1,4 +1,4 @@
-import { Optionable, NoElementError, Factory, Mapper, Predicate } from ".";
+import { Optionable, NoElementError, Factory, Mapper, Predicate, Func } from ".";
 import { empty } from "./factories";
 
 export default class Empty<T> implements Optionable<T> {
@@ -36,5 +36,10 @@ export default class Empty<T> implements Optionable<T> {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public flatMap<R>(_: Mapper<T, Optionable<R>>): Optionable<R> {
     return empty<R>();
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public ifPresent(_: Func<T>): void {
+    // do nothing
   }
 }

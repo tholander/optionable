@@ -46,4 +46,16 @@ describe("Present Optionable", () => {
     const mock = jest.fn().mockReturnValue(of(1));
     expect(option.flatMap(mock).isPresent).toBeTruthy();
   });
+
+  it("should execute callback", () => {
+    const mock = jest.fn();
+    option.ifPresent(mock);
+    expect(mock).toHaveBeenCalled();
+  });
+
+  it("should execute callback with correct argument", () => {
+    const mock = jest.fn();
+    option.ifPresent(mock);
+    expect(mock).toHaveBeenCalledWith(str);
+  });
 });

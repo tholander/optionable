@@ -1,4 +1,4 @@
-import { Optionable, Mapper, Factory, Predicate } from ".";
+import { Optionable, Mapper, Factory, Predicate, Func } from ".";
 import { ofNullable, of, empty } from "./factories";
 
 export class Present<T> implements Optionable<T> {
@@ -35,5 +35,9 @@ export class Present<T> implements Optionable<T> {
 
   public flatMap<R>(mapper: Mapper<T, Optionable<R>>): Optionable<R> {
     return mapper(this.value);
+  }
+
+  public ifPresent(func: Func<T>): void {
+    return func(this.value);
   }
 }
