@@ -8,7 +8,8 @@ export interface Optionable<T> {
   get: () => T;
   getOrElse: (factory: Factory<T>) => T;
   getOrDefault: (defaultValue: T) => T;
-  getOrThrow: <E extends ErrorConstructor | Error>(error: E) => T;
+  getOrThrow: <E extends ErrorConstructor>(error: E) => T;
+  getOrThrowError: <E extends Error>(error: E) => T;
   map: <R>(transformer: Mapper<T, R>) => Optionable<R>;
   filter: (predicate: Predicate<T>) => Optionable<T>;
   flatMap: <R>(mapper: Mapper<T, Optionable<R>>) => Optionable<R>;

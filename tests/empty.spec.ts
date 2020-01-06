@@ -17,8 +17,8 @@ describe("Empty Optionable", () => {
     expect(() => option.getOrThrow(TypeError)).toThrow(new TypeError());
   });
 
-  it("should throw with getOrThrow and error as argument", () => {
-    expect(() => option.getOrThrow(new TypeError())).toThrow(new TypeError());
+  it("should throw with getOrThrowError and error as argument", () => {
+    expect(() => option.getOrThrowError(new TypeError())).toThrow(new TypeError());
   });
 
   it("should return function result with getOrElse", () => {

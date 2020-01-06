@@ -16,11 +16,12 @@ export default class Empty<T> implements Optionable<T> {
     return factory();
   }
 
-  public getOrThrow<E extends ErrorConstructor | Error>(error: E): T {
-    if (error instanceof Error) {
-      throw error;
-    }
-    throw new (error as ErrorConstructor)();
+  public getOrThrow<E extends ErrorConstructor>(error: E): T {
+    throw new error();
+  }
+
+  public getOrThrowError<E extends Error>(error: E): T {
+    throw error;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

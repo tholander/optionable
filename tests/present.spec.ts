@@ -17,6 +17,10 @@ describe("Present Optionable", () => {
     expect(() => option.getOrThrow(TypeError)).not.toThrow();
   });
 
+  it("should not throw with getOrThrow error", () => {
+    expect(() => option.getOrThrowError(new TypeError())).not.toThrow();
+  });
+
   it("should not called function with getOrElse", () => {
     const mock = jest.fn().mockReturnValue("toto");
     const result = option.getOrElse(mock);

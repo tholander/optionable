@@ -29,6 +29,11 @@ export class Present<T> implements Optionable<T> {
     return this.value;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public getOrThrowError<E extends Error>(_: E): T {
+    return this.value;
+  }
+
   public filter(predicate: Predicate<T>): Optionable<T> {
     return predicate(this.value) ? of(this.value) : empty<T>();
   }
