@@ -10,27 +10,27 @@ describe("Empty Optionable", () => {
 
   it("should return default value with getOrDefault", () => {
     const str = faker.lorem.word();
-    expect(option.getOrDefault(str)).toBe(str);
+    expect(option.orElse(str)).toBe(str);
   });
 
   it("should throw with getOrThrow and type as argument", () => {
-    expect(() => option.getOrThrow(TypeError)).toThrow(new TypeError());
+    expect(() => option.orThrow(TypeError)).toThrow(new TypeError());
   });
 
   it("should throw with getOrThrowError and error as argument", () => {
-    expect(() => option.getOrThrowError(new TypeError())).toThrow(new TypeError());
+    expect(() => option.orThrow(new TypeError())).toThrow(new TypeError());
   });
 
   it("should return function result with getOrElse", () => {
     const str = faker.lorem.words();
     const factory = (): string => str;
-    expect(option.getOrElse(factory)).toBe(str);
+    expect(option.orElse(factory)).toBe(str);
   });
 
   it("should return function result with getOrElse", () => {
     const str = faker.lorem.words();
     const mock = jest.fn().mockReturnValue(str);
-    option.getOrElse(mock);
+    option.orElse(mock);
     expect(mock).toHaveBeenCalled();
   });
 

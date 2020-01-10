@@ -1,27 +1,33 @@
 import { Optionable, NoElementError, Factory, Mapper, Predicate, Func } from ".";
-import { empty } from "./factories";
+import { empty, ofNullable } from "./factories";
 
 export default class Empty<T> implements Optionable<T> {
   public readonly isPresent: boolean = false;
+  public readonly isEmpty: boolean = true;
 
   public get(): T {
     throw new NoElementError();
   }
 
-  public getOrDefault(defaultValue: T): T {
-    return defaultValue;
+  private isFunction(f: T | Factory<T>): f is Factory<T> {
+    return (f as Function).call !== undefined;
   }
 
-  public getOrElse(factory: Factory<T>): T {
-    return factory();
+  public orElse(supplier: T | Factory<T>): T {
+    if (this.isFunction(supplier)) {
+      return supplier();
+    }
+    return supplier;
   }
 
-  public getOrThrow<E extends ErrorConstructor>(error: E): T {
-    throw new error();
-  }
-
-  public getOrThrowError<E extends Error>(error: E): T {
-    throw error;
+  public orThrow<E extends ErrorConstructor | Error>(error?: E): T {
+    if (!error) {
+      throw new NoElementError();
+    }
+    if (error instanceof Error) {
+      throw error;
+    }
+    throw new (error as ErrorConstructor)();
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -42,5 +48,17 @@ export default class Empty<T> implements Optionable<T> {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public ifPresent(_: Func<T>): void {
     // do nothing
+  }
+
+  public ifPresentOrElse(_: (t: T) => void, runnable: () => void): void {
+    runnable();
+  }
+
+  public or(factory: Factory<T>): Optionable<T> {
+    return ofNullable(factory());
+  }
+
+  public toString(): string {
+    return "Empty()";
   }
 }

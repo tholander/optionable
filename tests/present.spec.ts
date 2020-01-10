@@ -10,20 +10,20 @@ describe("Present Optionable", () => {
   });
 
   it("should not return default value with getOrDefault", () => {
-    expect(option.getOrDefault("toto")).toBe(str);
+    expect(option.orElse("toto")).toBe(str);
   });
 
   it("should not throw with getOrThrow", () => {
-    expect(() => option.getOrThrow(TypeError)).not.toThrow();
+    expect(() => option.orThrow(TypeError)).not.toThrow();
   });
 
   it("should not throw with getOrThrow error", () => {
-    expect(() => option.getOrThrowError(new TypeError())).not.toThrow();
+    expect(() => option.orThrow(new TypeError())).not.toThrow();
   });
 
   it("should not called function with getOrElse", () => {
     const mock = jest.fn().mockReturnValue("toto");
-    const result = option.getOrElse(mock);
+    const result = option.orElse(mock);
     expect(mock).not.toHaveBeenCalled();
     expect(result).toBe(str);
   });
