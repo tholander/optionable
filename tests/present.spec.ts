@@ -62,4 +62,19 @@ describe("Present Optionable", () => {
     option.ifPresent(mock);
     expect(mock).toHaveBeenCalledWith(str);
   });
+
+  it("should return first value with or", () => {
+    const str2 = "or";
+    expect(option.or(() => str2).get()).toBe(str);
+  });
+
+  it("should call consumer with ifPresent", () => {
+    const mock = jest.fn();
+    option.ifPresentOrElse(mock, () => {});
+    expect(mock).toHaveBeenCalledWith(str);
+  });
+
+  it("should return correct string with toString", () => {
+    expect(option.toString()).toBe(`Optional(${str})`);
+  });
 });

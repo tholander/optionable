@@ -15,7 +15,7 @@ interface Getter<T> {
   (supplier: Factory<T>): T;
 }
 
-export interface Optionable<T> {
+export interface Optionable<T> extends Object {
   readonly isPresent: boolean;
   readonly isEmpty: boolean;
   get(): T;

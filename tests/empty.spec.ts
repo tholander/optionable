@@ -13,6 +13,10 @@ describe("Empty Optionable", () => {
     expect(option.orElse(str)).toBe(str);
   });
 
+  it("should throw with getOrThrow and no argument", () => {
+    expect(() => option.orThrow()).toThrow(new NoElementError());
+  });
+
   it("should throw with getOrThrow and type as argument", () => {
     expect(() => option.orThrow(TypeError)).toThrow(new TypeError());
   });
@@ -60,5 +64,20 @@ describe("Empty Optionable", () => {
     const mock = jest.fn();
     option.ifPresent(mock);
     expect(mock).not.toHaveBeenCalled();
+  });
+
+  it("should return second value with or", () => {
+    const str = "or";
+    expect(option.or(() => str).get()).toBe(str);
+  });
+
+  it("should call runnable with ifPresent", () => {
+    const mock = jest.fn();
+    option.ifPresentOrElse(() => {}, mock);
+    expect(mock).toHaveBeenCalled();
+  });
+
+  it("should return correct string with toString", () => {
+    expect(option.toString()).toBe("Empty()");
   });
 });
