@@ -1,193 +1,95 @@
-defaults: &defaults
-  working_directory: ~/repo
-  docker:
-    - image: circleci/node:10
-
-whitelist: &whitelist
-  paths:
-    - .npmignore
-    - coverage/*
-    - lib/*
-    - node_modules/*
-    - src/*
-    - tests/*
-    - LICENSE
-    - package.json
-    - README.md
-    - tsconfig.json
-    - .eslintrc
-    - .eslintignore
-    - .prettierrc
-    - .editorconfig
-    - jest.config.js
-    - .vscode/*
 version: 2
 jobs:
-  checkout:
-    <<: *defaults
+    Build:
+        docker:
+            - image: circleci/node:12
 
-    steps:
-      - checkout
+        working_directory: ~/repo
 
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "package.json" }}
-          - v1-dependencies-
+        steps:
+            - checkout
 
-      - run:
-          name: Install Dependencies
-          command: yarn install
+            # Download and cache dependencies
+            - restore_cache:
+                keys:
+                    - v1-dependencies-{{ checksum "package.json" }}
+                    # fallback to using the latest cache if no exact match is found
+                    - v1-dependencies-
 
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+            - run:
+                name: Install dependencies
+                command: yarn install
 
-      - persist_to_workspace:
-          root: ~/repo
-          <<: *whitelist
-
-  lint:
-    <<: *defaults
-
-    steps:
-      - attach_workspace:
-          at: ~/repo
-
-      - run:
-          name: Lint TypeScript code
-          command: yarn lint
-
-  test:
-    <<: *defaults
-
-    steps:
-      - attach_workspace:
-          at: ~/repo
-
-      - run:
-          name: Test TypeScript code
-          command: yarn test:cover
-
-      - persist_to_workspace:
-          root: ~/repo
-          <<: *whitelist
-
-  coveralls:
-    <<: *defaults
-
-    steps:
-      - attach_workspace:
-          at: ~/repo
-
-      - run:
-          name: Submit coverage report to Coveralls.io
-          command: yarn coveralls
-
-  build:
-    <<: *defaults
-
-    steps:
-      - attach_workspace:
-          at: ~/repo
-
-      - run:
-          name: Build TypeScript code
-          command: yarn build
-
-      - persist_to_workspace:
-          root: ~/repo
-          <<: *whitelist
-
-  deploy:
-    <<: *defaults
-
-    steps:
-      - attach_workspace:
-          at: ~/repo
-
-      - run: 
-          name: Write NPM Token to ~/.npmrc
-          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-
-      - run: 
-          name: Install dot-json package
-          command: npm install dot-json
-
-      - run:
-          name: Write version to package.json
-          command: $(yarn bin)/dot-json package.json version ${CIRCLE_TAG:1}
-
-      - run:
-          name: Publish to NPM
-          command: npm publish --access=public
-
+            - save_cache:
+                paths:
+                    - node_modules
+                key: v1-dependencies-{{ checksum "package.json" }}
+        
+            - run:
+                name: Build Typescript source code
+                command: yarn build
+                when: always
+    Lint:
+        docker:
+            - image: circleci/node:12
+        working_directory: ~/repo
+        steps:
+            - checkout
+            - restore_cache:
+                keys:
+                    - v1-dependencies-{{ checksum "package.json" }}
+                    # fallback to using the latest cache if no exact match is found
+                    - v1-dependencies-
+            - run:
+                name: Install dependencies
+                command: yarn install
+            - save_cache:
+                paths:
+                    - node_modules
+                key: v1-dependencies-{{ checksum "package.json" }}
+            - run:
+                name: Lint source with ESLint
+                command: |
+                    yarn lint --format junit --output-file ~/reports/eslint.xml
+                    yarn lint:test --format junit --output-file ~/reports/eslint-test.xml
+                when: always
+            - store_test_results:
+                path: ~/reports
+    
+            - store_artifacts:
+                path: ~/reports   
+    Tests:
+        docker:
+            - image: circleci/node:12
+        working_directory: ~/repo
+        steps:
+            - checkout
+            - restore_cache:
+                keys:
+                    - v1-dependencies-{{ checksum "package.json" }}
+                    # fallback to using the latest cache if no exact match is found
+                    - v1-dependencies-
+            - run:
+                name: Install dependencies
+                command: yarn install
+            - run:
+                name: Install JUnit coverage reporter
+                command: yarn add --dev jest-junit
+            - run:
+                name: Run tests with JUnit as reporter
+                command: yarn test --ci --runInBand --reporters=default --reporters=jest-junit
+                environment:
+                    JEST_JUNIT_OUTPUT_DIR: "reports/junit/js-test-results.xml"
+    
 workflows:
-  version: 2
-
-  build:
-    jobs:
-      - checkout
-      - test:
-          requires:
-            - checkout
-      - lint:
-          requires:
-            - checkout
-      - coveralls:
-          requires:
-            - test
-      - build:
-          requires:
-            - test
-            - lint
-
-  release:
-    jobs:
-      - checkout:
-          filters:
-            tags:
-              only: /v[0-9]+(\.[0-9]+)*/
-            branches:
-              ignore: /.*/
-      - test:
-          filters:
-            tags:
-              only: /v[0-9]+(\.[0-9]+)*/
-            branches:
-              ignore: /.*/
-          requires:
-            - checkout
-      - lint:
-          filters:
-            tags:
-              only: /v[0-9]+(\.[0-9]+)*/
-            branches:
-              ignore: /.*/
-          requires:
-            - checkout
-      - coveralls:
-          filters:
-            tags:
-              only: /v[0-9]+(\.[0-9]+)*/
-            branches:
-              ignore: /.*/
-          requires:
-            - test
-      - build:
-          filters:
-            tags:
-              only: /v[0-9]+(\.[0-9]+)*/
-            branches:
-              ignore: /.*/
-          requires:
-            - test
-            - lint
-      - deploy:
-          filters:
-            tags:
-              only: /v[0-9]+(\.[0-9]+)*/
-            branches:
-              ignore: /.*/
-          requires:
-            - build
+    version: 2
+    test_and_lint:
+        jobs:
+            - Build
+            - Lint:
+                requires:
+                    - Build
+            - Tests:
+                requires:
+                    - Build
+                    

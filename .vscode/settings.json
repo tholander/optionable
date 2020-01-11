@@ -1,15 +1,10 @@
 {
-    "eslint.autoFixOnSave": true,
-    "eslint.validate": [
-        {"language": "javascript", "autoFix": true},
-        { "language": "typescript", "autoFix": true }
-    ],
     "[json]": {
         "editor.formatOnSave": true,
         "editor.formatOnPaste": true,
         "editor.formatOnType": true
     },
-    "[jsonc]": { 
+    "[jsonc]": {
         "editor.formatOnSave": true,
         "editor.formatOnPaste": true,
         "editor.formatOnType": true

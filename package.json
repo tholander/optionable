@@ -23,6 +23,7 @@
     "prepack": "yarn build",
     "postpack": "yarn clean",
     "lint": "eslint src/**/*.ts",
+    "lint:test": "eslint tests/**/*.ts",
     "lint:fix": "eslint src/**/*.ts --fix",
     "pretest": "yarn lint:fix",
     "test": "jest",
