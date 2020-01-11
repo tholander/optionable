@@ -78,20 +78,19 @@ try {
   ...
 }
 ```
-#### getOrDefault
-The `getOrDefault` method is a way to pass a default value in case there's no value wrapped in the `Optionable`.
+#### orElse
+The `orElse` method is a way to pass a default value in case there's no value wrapped in the `Optionable`.
 
 ```typescript
 import { Optionable } from "optionable"
 
 const foo: Optionable<string> = ... ;
 
-const bar = foo.getOrDefault("bar");
+const bar = foo.orElse("bar");
 ```
 With this method, if there's no value in `foo` it will return `"bar"`.
 
-#### getOrElse
-The `getOrElse` method follow the same principles than `getOrDefault` except it takes a function as an argument.
+The `orElse` method also accept a factory callback as an argument. The callback will be executed if no value is present in the `Optionable`
 
 ```typescript
 import { Optionable } from "optionable"
@@ -102,11 +101,11 @@ function getRandomString(): string {
 
 const foo: Optionable<string> = ... ;
 
-const bar = foo.getOrElse(getRandomString);
+const bar = foo.orElse(getRandomString);
 ```
 Here, if `foo` is empty, `getRandomString` will be called and it's result will be returned.
 
-#### getOrThrow
+#### orThrow
 This method is use to control the Error to throw in case there's no value in an `Optionable` object.
 
 Instead of 
@@ -127,11 +126,14 @@ import { Optionable } from "optionable";
 
 const foo: Optionable<string> = ...;
 
-const bar: string = foo.getOrThrow(MyCustomError);
+const bar: string = foo.orThrow(); // will throw a NoElementError
 // or
-const bar: string = foo.getOrThrow(new MyCustomError("my custom error message"));
+const bar: string = foo.orThrow(MyCustomError);
+// or
+const bar: string = foo.orThrow(new MyCustomError("my custom error message"));
 ```
 
+### Helpers
 #### map
 This method has the same purpose as the `Array.prototype.map` function. You can use it to transform the value contained in an `Optionable` object.
 
@@ -146,4 +148,84 @@ interface User {
 ...
 const user: Optionable<User> = getOneUser();
 const username: Optionable<string> = user.map(u => `${u.firstname} ${u.lastname.toUpperCase()}`);
+```
+
+#### filter
+This method will return an empty `Optionable` if the predicate you pass to it is false
+```typescript
+import { of } from "optionable"
+
+const foo = of("foo")
+            .filter((str: string) => str.length < 2)
+            .isPresent; // false
+const bar = of("bar")
+            .filter((str: string) => str.length > 0)
+            .isPresent; // true
+```
+
+#### flatMap
+This method is useful for mapping an `Optionable` object using a function which returns an `Optionable` value
+```typescript
+import { ofNullable, Optionable } from "optionable";
+
+function getUsers(): Optionable<User[]> {
+  ...
+}
+
+function getFirstWoman(users: User[]): Optionable<User> {
+  return ofNullable(users.find(u => u.sex === "female"));
+}
+
+const users = getUsers();
+const woman: Optionable<User> = users.flatMap(getFirstWoman);
+```
+
+### ifPresent
+This method accept a callback which returns no result but accept the value as an argument. It will be executed only if a value is present in the `Optionable` object.
+
+```typescript
+import { of, empty } from "optionable";
+
+function printLength(str: string) {
+    console.log(str.length)
+}
+
+const foo = of<string>("foo").ifPresent(printLength); // prints 3
+const bar = empty<string>().ifPresent(printLength); // prints nothing
+```
+
+### ifPresentOrElse
+This method is almost the same as the previous one, except that it accepts a second argument. This argument is callback that will run if no value is present. The callback has no arguments and returns nothing.
+
+```typescript
+import { empty, of } from "optionable";
+
+function printLength(str: string) {
+    console.log(str.length);
+}
+function logError() {
+    console.error("No value present");
+}
+
+const foo = of<string>("foo").ifPresentOrElse(printLength, logError); 
+// prints 3
+
+const bar = empty<string>().ifPresentOrElse(printLength, logError); 
+// prints "No value present"
+```
+
+### or
+This method is kind of a fallback method, to have a default value **inside** an `Optionable` object.
+
+```typescript
+import { Optionable } from "optionable";
+
+function getSomeRandomString(): Optionable<string> {
+    // do something to eventually return a string
+}
+
+const length: number = getSomeRandomString()
+                        .or("")
+                        .map(str => str.length)
+                        .get();
 ```

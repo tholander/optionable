@@ -1,5 +1,5 @@
 import * as faker from "faker";
-import { of } from "../src";
+import { of, empty } from "../src";
 
 describe("Present Optionable", () => {
   const str = faker.lorem.words();
@@ -10,16 +10,20 @@ describe("Present Optionable", () => {
   });
 
   it("should not return default value with getOrDefault", () => {
-    expect(option.getOrDefault("toto")).toBe(str);
+    expect(option.orElse("toto")).toBe(str);
   });
 
   it("should not throw with getOrThrow", () => {
-    expect(() => option.getOrThrow(TypeError)).not.toThrow();
+    expect(() => option.orThrow(TypeError)).not.toThrow();
+  });
+
+  it("should not throw with getOrThrow error", () => {
+    expect(() => option.orThrow(new TypeError())).not.toThrow();
   });
 
   it("should not called function with getOrElse", () => {
     const mock = jest.fn().mockReturnValue("toto");
-    const result = option.getOrElse(mock);
+    const result = option.orElse(mock);
     expect(mock).not.toHaveBeenCalled();
     expect(result).toBe(str);
   });
@@ -27,5 +31,50 @@ describe("Present Optionable", () => {
   it("should return correct value with map", () => {
     const upper = str.toUpperCase();
     expect(option.map(s => s.toUpperCase()).get()).toBe(upper);
+  });
+
+  it("should return empty with falsy filter", () => {
+    expect(option.filter(() => false).isPresent).toBeFalsy();
+  });
+
+  it("should return not empty with truthy filter", () => {
+    expect(option.filter(() => true).isPresent).toBeTruthy();
+  });
+
+  it("should return empty with empty flatMap", () => {
+    const mock = jest.fn().mockReturnValue(empty());
+    expect(option.flatMap(mock).isPresent).toBeFalsy();
+  });
+
+  it("should return non-empty with non-empty flatMap", () => {
+    const mock = jest.fn().mockReturnValue(of(1));
+    expect(option.flatMap(mock).isPresent).toBeTruthy();
+  });
+
+  it("should execute callback", () => {
+    const mock = jest.fn();
+    option.ifPresent(mock);
+    expect(mock).toHaveBeenCalled();
+  });
+
+  it("should execute callback with correct argument", () => {
+    const mock = jest.fn();
+    option.ifPresent(mock);
+    expect(mock).toHaveBeenCalledWith(str);
+  });
+
+  it("should return first value with or", () => {
+    const str2 = "or";
+    expect(option.or(() => str2).get()).toBe(str);
+  });
+
+  it("should call consumer with ifPresent", () => {
+    const mock = jest.fn();
+    option.ifPresentOrElse(mock, () => {});
+    expect(mock).toHaveBeenCalledWith(str);
+  });
+
+  it("should return correct string with toString", () => {
+    expect(option.toString()).toBe(`Optional(${str})`);
   });
 });

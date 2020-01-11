@@ -1,6 +1,6 @@
 {
   "name": "optionable",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A Typescript OOP implementation of monad",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -13,19 +13,21 @@
   "husky": {
     "hooks": {
       "pre-commit": "yarn lint:fix",
-      "pre-push": "yarn lint"
+      "pre-push": "yarn test:cover"
     }
   },
   "scripts": {
     "build": "tsc",
-    "clean": "rimraf ./lib",
+    "clean": "rimraf ./lib ./coverage",
     "prebuild": "yarn clean",
     "prepack": "yarn build",
     "postpack": "yarn clean",
     "lint": "eslint src/**/*.ts",
+    "lint:test": "eslint tests/**/*.ts",
     "lint:fix": "eslint src/**/*.ts --fix",
+    "pretest": "yarn lint:fix",
     "test": "jest",
-    "test:cover": "jest --coverage",
+    "test:cover": "yarn test --coverage",
     "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
   "devDependencies": {
@@ -49,6 +51,7 @@
     "typescript",
     "optional",
     "monad",
-    "type safety"
+    "type-safety",
+    "null-check"
   ]
 }
