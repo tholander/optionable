@@ -51,13 +51,13 @@ jobs:
                 name: Lint source with ESLint
                 command: |
                     yarn lint --format junit --output-file ~/reports/eslint.xml
-                    yarn lint:test --format junit --output-file ~/reports/eslint-test.xml
+                    yarn lint:test --format junit --output-file ~/reports/eslint/lint-result.xml
                 when: always
             - store_test_results:
-                path: ~/reports
+                path: reports/eslint
     
             - store_artifacts:
-                path: ~/reports   
+                path: reports/eslint
     Tests:
         docker:
             - image: circleci/node:12
@@ -79,7 +79,11 @@ jobs:
                 name: Run tests with JUnit as reporter
                 command: yarn test --ci --runInBand --reporters=default --reporters=jest-junit
                 environment:
-                    JEST_JUNIT_OUTPUT_DIR: "reports/junit/js-test-results.xml"
+                    JEST_JUNIT_OUTPUT_DIR: "reports/jest/js-test-results.xml"
+            - store_test_results:
+                path: reports/jest
+            - store_artifacts:
+                path: reports/jest
     
 workflows:
     version: 2
