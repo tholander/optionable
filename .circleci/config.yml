@@ -51,7 +51,7 @@ jobs:
                 name: Lint source with ESLint
                 command: |
                     yarn lint --format junit --output-file ~/reports/eslint.xml
-                    yarn lint:test --format junit --output-file ~/reports/eslint/lint-result.xml
+                    yarn lint:test --format junit --output-file reports/eslint/lint-result.xml
                 when: always
             - store_test_results:
                 path: reports/eslint
