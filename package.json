@@ -13,7 +13,8 @@
   "husky": {
     "hooks": {
       "pre-commit": "yarn lint:fix",
-      "pre-push": "yarn build"
+      "pre-push": "yarn build",
+      "post-push": "yarn clean"
     }
   },
   "scripts": {

@@ -5,8 +5,4 @@ describe("NoElementError", () => {
     const error = new NoElementError();
     expect(error.message).toBe("Element not present");
   });
-
-  it("fail", () => {
-    expect(true).toBe(false);
-  });
 });
