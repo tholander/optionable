@@ -73,17 +73,20 @@ jobs:
                 name: Install dependencies
                 command: yarn install
             - run:
-                name: Install JUnit coverage reporter
+                name: Install JUnit test reporter
                 command: yarn add --dev jest-junit
             - run:
                 name: Run tests with JUnit as reporter
-                command: yarn test --ci --runInBand --reporters=default --reporters=jest-junit
+                command: yarn test --ci --runInBand --reporters=default --reporters=jest-junit --coverage
                 environment:
                     JEST_JUNIT_OUTPUT_DIR: "reports/jest/js-test-results.xml"
             - store_test_results:
                 path: reports/jest
             - store_artifacts:
                 path: reports/jest
+            - store_artifacts:
+                path: coverage
+                destination: coverage
     
 workflows:
     version: 2
