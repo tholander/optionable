@@ -1,4 +1,4 @@
-import * as faker from "faker";
+import { faker } from "@faker-js/faker";
 import { empty, NoElementError, of } from "../src";
 
 describe("Empty Optionable", () => {
@@ -73,6 +73,7 @@ describe("Empty Optionable", () => {
 
   it("should call runnable with ifPresent", () => {
     const mock = jest.fn();
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     option.ifPresentOrElse(() => {}, mock);
     expect(mock).toHaveBeenCalled();
   });

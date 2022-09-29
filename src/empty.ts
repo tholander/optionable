@@ -1,4 +1,5 @@
-import { Optionable, NoElementError, Factory, Mapper, Predicate, Func } from ".";
+import { Optionable, NoElementError } from ".";
+import type { Factory, Func, Mapper, Predicate } from ".";
 import { empty, ofNullable } from "./factories";
 
 export default class Empty<T> implements Optionable<T> {
@@ -10,7 +11,7 @@ export default class Empty<T> implements Optionable<T> {
   }
 
   private isFunction(f: T | Factory<T>): f is Factory<T> {
-    return (f as Function).call !== undefined;
+    return typeof f === "function";
   }
 
   public orElse(supplier: T | Factory<T>): T {
