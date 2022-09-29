@@ -1,4 +1,5 @@
-import { Optionable, Mapper, Factory, Predicate, Func } from ".";
+import { Optionable } from ".";
+import type { Factory, Func, Mapper, Predicate } from ".";
 import { ofNullable, of, empty } from "./factories";
 
 export class Present<T> implements Optionable<T> {

@@ -1,4 +1,4 @@
-import { Optionable } from ".";
+import type { Optionable } from ".";
 import { Present } from "./present";
 import Empty from "./empty";
 
@@ -6,7 +6,7 @@ export function of<T>(value: T): Optionable<T> {
   if (value === null || value === undefined) {
     throw new Error("value is null");
   }
-  return new Present(value);
+  return new Present<T>(value);
 }
 
 export function ofNullable<T>(value: T): Optionable<T> {
